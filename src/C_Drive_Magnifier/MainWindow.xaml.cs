@@ -100,5 +100,10 @@ namespace C_Drive_Magnifier
         {
             LoadDrive(CurrentDir);
         }
+
+        private void prevPathButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoadDrive(PrevPath);
+        }
     }
 }
