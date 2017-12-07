@@ -1,0 +1,22 @@
+﻿<Controls:MetroWindow x:Class="C_Drive_Magnifier.Settings"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:C_Drive_Magnifier"
+        mc:Ignorable="d"
+        Title="Settings" Height="300" Width="500" ResizeMode="NoResize" Closing="MetroWindow_Closing" Background="#FFCBF3F9" Loaded="MetroWindow_Loaded">
+    <Controls:MetroWindow.RightWindowCommands>
+        <Controls:WindowCommands>
+            <Button x:Name="saveSettings" Content="Save" Click="saveSettings_Click"/>
+        </Controls:WindowCommands>
+    </Controls:MetroWindow.RightWindowCommands>
+    <Grid>
+        <StackPanel>
+            <CheckBox x:Name="overwriteFileIfExistsCheckbox" Margin="10" Click="ModifiedSettings">OVERWRITE FILE IF ALREADY EXISTS</CheckBox>
+            <CheckBox x:Name="openFileAfterCopyCheckbox" Margin="10" Click="ModifiedSettings">OPEN FILE AFTER COPY</CheckBox>
+            <CheckBox x:Name="showSuccessfulTransferCheckbox" Margin="10" Click="ModifiedSettings">SHOW SUCCESSFUL TRANSFER MESSAGE</CheckBox>
+        </StackPanel>
+    </Grid>
+</Controls:MetroWindow>
