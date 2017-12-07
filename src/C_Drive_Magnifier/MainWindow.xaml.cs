@@ -42,38 +42,31 @@ namespace C_Drive_Magnifier
             CurrentDir = path;
             contentDisplay.Children.Clear();
             FileAttributes attribs = File.GetAttributes(CurrentDir);
-            if (attribs.HasFlag(FileAttributes.Directory))
+            foreach (string content in Directory.GetDirectories(path))
             {
-                foreach (string content in Directory.GetDirectories(path))
-                {
-                    Button button = new Button();
-                    button.Content = content;
-                    button.Tag = "folder";
-                    Thickness margin = button.Margin;
-                    margin.Top = 10;
-                    margin.Left = 40;
-                    margin.Right = 40;
-                    button.Margin = margin;
-                    contentDisplay.Children.Add(button);
-                    button.Click += new RoutedEventHandler(OnButtonClick);
-                }
-                foreach (string content in Directory.GetFiles(path))
-                {
-                    Button button = new Button();
-                    button.Content = content;
-                    button.Tag = "file";
-                    Thickness margin = button.Margin;
-                    margin.Top = 10;
-                    margin.Left = 40;
-                    margin.Right = 40;
-                    button.Margin = margin;
-                    contentDisplay.Children.Add(button);
-                    button.Click += new RoutedEventHandler(OnButtonClick);
-                }
+                Button button = new Button();
+                button.Content = content;
+                button.Tag = "folder";
+                Thickness margin = button.Margin;
+                margin.Top = 10;
+                margin.Left = 40;
+                margin.Right = 40;
+                button.Margin = margin;
+                contentDisplay.Children.Add(button);
+                button.Click += new RoutedEventHandler(OnButtonClick);
             }
-            else
+            foreach (string content in Directory.GetFiles(path))
             {
-                LoadDrive(PrevPath);
+                Button button = new Button();
+                button.Content = content;
+                button.Tag = "file";
+                Thickness margin = button.Margin;
+                margin.Top = 10;
+                margin.Left = 40;
+                margin.Right = 40;
+                button.Margin = margin;
+                contentDisplay.Children.Add(button);
+                button.Click += new RoutedEventHandler(OnButtonClick);
             }
         }
 
@@ -83,14 +76,13 @@ namespace C_Drive_Magnifier
             FileAttributes attribs = File.GetAttributes(clickedPath);
             if (attribs.HasFlag(FileAttributes.Directory))
             {
-                MessageBox.Show("It's a folder");
+                LoadDrive(clickedPath);
             }
             else
             {
                 FileHandler userFile = new FileHandler(clickedPath);
                 userFile.CopyFileToLocal();
             }
-            LoadDrive(clickedPath);
         }
 
         private void settingsButton_Click(object sender, RoutedEventArgs e)
