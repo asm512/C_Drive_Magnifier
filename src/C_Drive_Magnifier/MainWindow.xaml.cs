@@ -23,6 +23,7 @@ namespace C_Drive_Magnifier
     public partial class MainWindow : MetroWindow
     {
         public string CurrentDir = "C:/";
+        public string PrevPath = "";
 
         public MainWindow()
         {
@@ -37,30 +38,59 @@ namespace C_Drive_Magnifier
 
         private void LoadDrive(string path = "C:/")
         {
+            PrevPath = CurrentDir;
             CurrentDir = path;
             contentDisplay.Children.Clear();
-            foreach(string content in Directory.GetDirectories(path))
+            FileAttributes attribs = File.GetAttributes(CurrentDir);
+            if (attribs.HasFlag(FileAttributes.Directory))
             {
-                Button button = new Button();
-                button.Content = content;
-                Thickness margin = button.Margin;
-                margin.Top = 10;
-                margin.Left = 40;
-                margin.Right = 40;
-                button.Margin = margin;
-                contentDisplay.Children.Add(button);
-                button.Click += new RoutedEventHandler(OnButtonClick);
+                foreach (string content in Directory.GetDirectories(path))
+                {
+                    Button button = new Button();
+                    button.Content = content;
+                    button.Tag = "folder";
+                    Thickness margin = button.Margin;
+                    margin.Top = 10;
+                    margin.Left = 40;
+                    margin.Right = 40;
+                    button.Margin = margin;
+                    contentDisplay.Children.Add(button);
+                    button.Click += new RoutedEventHandler(OnButtonClick);
+                }
+                foreach (string content in Directory.GetFiles(path))
+                {
+                    Button button = new Button();
+                    button.Content = content;
+                    button.Tag = "file";
+                    Thickness margin = button.Margin;
+                    margin.Top = 10;
+                    margin.Left = 40;
+                    margin.Right = 40;
+                    button.Margin = margin;
+                    contentDisplay.Children.Add(button);
+                    button.Click += new RoutedEventHandler(OnButtonClick);
+                }
+            }
+            else
+            {
+                LoadDrive(PrevPath);
             }
         }
 
         private void OnButtonClick(object sender, RoutedEventArgs e)
         {
             string clickedPath = sender.ToString().Replace("System.Windows.Controls.Button: ", "");
-            FileAttributes attr = File.GetAttributes(clickedPath);
-            if (attr.HasFlag(FileAttributes.Directory))
-                MessageBox.Show("Its a directory");
+            FileAttributes attribs = File.GetAttributes(clickedPath);
+            if (attribs.HasFlag(FileAttributes.Directory))
+            {
+                MessageBox.Show("It's a folder");
+            }
             else
-                MessageBox.Show("Its a file");
+            {
+                FileHandler userFile = new FileHandler(clickedPath);
+                userFile.CopyFileToLocal();
+            }
+            LoadDrive(clickedPath);
         }
 
         private void settingsButton_Click(object sender, RoutedEventArgs e)

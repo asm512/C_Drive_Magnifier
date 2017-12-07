@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Windows.Forms;
 
 namespace C_Drive_Magnifier
 {
@@ -22,22 +23,34 @@ namespace C_Drive_Magnifier
             var settings = new IniFile("settings.ini");
             try
             {
-                File.Copy(filePath, settings.Read("LocalFolder" + Path.GetFileName(filePath)), true);
+                File.Copy(filePath, settings.Read("LocalDir") + Path.GetFileName(filePath), Convert.ToBoolean(settings.Read("OpenFileAfterCopy")));
+                MessageBox.Show("file copied to" + settings.Read("LocalDir") + Path.GetFileName(filePath));
+                if (Convert.ToBoolean(settings.Read("ShowSuccessfulTransferDialog")))
+                {
+                    MessageBox.Show("Successfully retreived file", "Success", MessageBoxButtons.OK);   
+                }
+                if (Convert.ToBoolean(settings.Read("OpenFileAfterCopy")))
+                {
+                    System.Diagnostics.Process.Start(settings.Read("LocalDir") + Path.GetFileName(filePath));   
+                }
+
                 return true;
-            }
-            catch (Exception)
+        }
+            catch (Exception e)
             {
+                MessageBox.Show(e.Message);
                 return false;
                 throw;
             }
-        }
+}
 
         public static void DoINIFileChecks()
         {
             if (!Directory.Exists(settings.Read("LocalDir")))
             {
-                System.Windows.Forms.MessageBox.Show("The specified local path was not found and therefore was defaulted to current exe build path", "Invalid Path");
-                settings.Write("LocalDir", )
+                MessageBox.Show("The specified local path was not found and therefore was defaulted to current exe path", "Invalid Path");
+                settings.Write("LocalDir", AppDomain.CurrentDomain.BaseDirectory + @"My Files");
+                if (!Directory.Exists(settings.Read("LocalDir"))) { Directory.CreateDirectory(settings.Read("LocalDir")); }
             }
         }
 

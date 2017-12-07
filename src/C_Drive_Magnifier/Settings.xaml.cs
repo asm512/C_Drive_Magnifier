@@ -46,6 +46,7 @@ namespace C_Drive_Magnifier
 
             if (showSuccessfulTransferCheckbox.IsChecked == true) { settings.Write("ShowSuccessfulTransferDialog", "true"); }
             else { settings.Write("ShowSuccessfulTransferDialog", "false"); }
+            HaveSettingsBeenModified = false;
         }
 
         private void MetroWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
