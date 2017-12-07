@@ -24,7 +24,6 @@ namespace C_Drive_Magnifier
             try
             {
                 File.Copy(filePath, settings.Read("LocalDir") + Path.GetFileName(filePath), Convert.ToBoolean(settings.Read("OpenFileAfterCopy")));
-                MessageBox.Show("file copied to" + settings.Read("LocalDir") + Path.GetFileName(filePath));
                 if (Convert.ToBoolean(settings.Read("ShowSuccessfulTransferDialog")))
                 {
                     MessageBox.Show("Successfully retreived file", "Success", MessageBoxButtons.OK);   
