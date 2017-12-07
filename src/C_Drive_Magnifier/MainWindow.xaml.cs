@@ -22,8 +22,8 @@ namespace C_Drive_Magnifier
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        public string CurrentDir = "C:/";
-        public string PrevPath = "";
+        internal string CurrentDir = "C:/";
+        internal string PrevPath = "";
 
         public MainWindow()
         {
@@ -41,33 +41,42 @@ namespace C_Drive_Magnifier
             PrevPath = CurrentDir;
             CurrentDir = path;
             contentDisplay.Children.Clear();
-            FileAttributes attribs = File.GetAttributes(CurrentDir);
-            foreach (string content in Directory.GetDirectories(path))
+            try
             {
-                Button button = new Button();
-                button.Content = content;
-                button.Tag = "folder";
-                Thickness margin = button.Margin;
-                margin.Top = 10;
-                margin.Left = 40;
-                margin.Right = 40;
-                button.Margin = margin;
-                contentDisplay.Children.Add(button);
-                button.Click += new RoutedEventHandler(OnButtonClick);
+                foreach (string content in Directory.GetDirectories(path))
+                {
+                    Button button = new Button();
+                    button.Content = content;
+                    button.Tag = "folder";
+                    button.Background = Brushes.Yellow;
+                    Thickness margin = button.Margin;
+                    margin.Top = 10;
+                    margin.Left = 40;
+                    margin.Right = 40;
+                    button.Margin = margin;
+                    contentDisplay.Children.Add(button);
+                    button.Click += new RoutedEventHandler(OnButtonClick);
+                }
+                foreach (string content in Directory.GetFiles(path))
+                {
+                    Button button = new Button();
+                    button.Content = content;
+                    button.Tag = "file";
+                    button.Background = Brushes.CadetBlue;
+                    Thickness margin = button.Margin;
+                    margin.Top = 10;
+                    margin.Left = 40;
+                    margin.Right = 40;
+                    button.Margin = margin;
+                    contentDisplay.Children.Add(button);
+                    button.Click += new RoutedEventHandler(OnButtonClick);
+                }
             }
-            foreach (string content in Directory.GetFiles(path))
+            catch (Exception e)
             {
-                Button button = new Button();
-                button.Content = content;
-                button.Tag = "file";
-                Thickness margin = button.Margin;
-                margin.Top = 10;
-                margin.Left = 40;
-                margin.Right = 40;
-                button.Margin = margin;
-                contentDisplay.Children.Add(button);
-                button.Click += new RoutedEventHandler(OnButtonClick);
+                MessageBox.Show("Unable to load drive content due to the following error : " + e.Message + Environment.NewLine + "If the error was an unauthorized access error, make sure to attatch VS's debugger since this should transfer VS's admin rights", "Exception caught");
             }
+
         }
 
         private void OnButtonClick(object sender, RoutedEventArgs e)

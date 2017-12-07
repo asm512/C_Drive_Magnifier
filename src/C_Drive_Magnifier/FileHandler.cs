@@ -39,7 +39,7 @@ namespace C_Drive_Magnifier
             {
                 MessageBox.Show(e.Message);
                 return false;
-                throw;
+                throw; //Probably shouldn't throw but whatever
             }
 }
 
